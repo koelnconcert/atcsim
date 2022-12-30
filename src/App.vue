@@ -3,7 +3,7 @@ import DebugVoices from './components/DebugVoices.vue'
 </script>
 
 <template>
-  <main>
+  <main class="p-2">
     <DebugVoices/>
   </main>
 </template>

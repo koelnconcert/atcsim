@@ -17,13 +17,22 @@ function play (voice) {
 </script>
 
 <template>
-  <input v-model="text"/>
+  <input
+    class="border mb-2 bg-gray-100"
+    v-model="text"
+  />
   <ul>
     <li
       v-for="voice in voices"
       :key="voice.voice"
     >
-      <button @click="play(voice.voice)" :disabled="isActive">Play</button>
+      <button
+        class="border border-gray-600 rounded p-1 my-0.5 mr-1 disabled:text-gray-600 disabled:cursor-not-allowed"
+        @click="play(voice.voice)"
+        :disabled="isActive"
+      >
+        Play
+      </button>
       {{ voice.voice }}
 
     </li>
