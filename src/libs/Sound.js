@@ -11,7 +11,7 @@ function call (path) {
     })
 }
 
-class SoundApiClient {
+class Sound {
   isActive = isActive
 
   listVoices () {
@@ -24,4 +24,4 @@ class SoundApiClient {
   }
 }
 
-export default new SoundApiClient()
+export default new Sound()

@@ -1,19 +1,19 @@
 <script setup>
 import { ref } from 'vue'
-import SoundApiClient from '../libs/SoundApiClient'
+import Sound from '@/libs/Sound'
 
-const isActive = SoundApiClient.isActive
+const isActive = Sound.isActive
 const text = ref('This is a test')
 const voices = ref([])
-const speed = ref(180)
+const speed = ref(140)
 const pitch = ref(50)
 
-SoundApiClient.listVoices().then(data => {
+Sound.listVoices().then(data => {
   voices.value = data.voices.sort((a, b) => a.voice.localeCompare(b.voice))
 })
 
 function play (voice) {
-  SoundApiClient.say({
+  Sound.say({
     text: text.value,
     speed: speed.value,
     pitch: pitch.value,
