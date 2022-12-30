@@ -28,31 +28,31 @@ function play (voice) {
     <label>Speed</label>
     <div>
       <input
-          type="range"
-          class="max-w-xs"
-          min="20"
-          max="200"
-          v-model="speed"
-      />
+        v-model="speed"
+        type="range"
+        class="max-w-xs"
+        min="20"
+        max="200"
+      >
       {{ speed }}
     </div>
     <label>Pitch</label>
     <div>
       <input
+        v-model="pitch"
         type="range"
         class="max-w-xs"
         min="0"
         max="99"
-        v-model="pitch"
-      />
+      >
       {{ pitch }}
     </div>
     <label>Text</label>
     <input
+      v-model="text"
       type="text"
       class="border border-zinc-600 mb-2 bg-zinc-800 px-1"
-      v-model="text"
-    />
+    >
   </div>
   <ul>
     <li
@@ -61,13 +61,12 @@ function play (voice) {
     >
       <button
         class="border border-zinc-600 rounded p-1 my-0.5 mr-1 disabled:text-gray-600 disabled:cursor-not-allowed"
-        @click="play(voice.voice)"
         :disabled="isActive"
+        @click="play(voice.voice)"
       >
         Play
       </button>
       {{ voice.voice }}
-
     </li>
   </ul>
 </template>
