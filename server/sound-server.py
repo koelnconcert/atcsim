@@ -56,10 +56,10 @@ def tts_speak():
 
 @route("/tts/voices")
 def tts_voices():
-  voices = [ { 
-    "voice": voice["File"], 
-    "label": voice["VoiceName"], 
-    "gender": voice["Age/Gender"].lower() 
+  voices = [ {
+    "voice": voice["File"],
+    "label": voice["VoiceName"],
+    "gender": voice["Age/Gender"].lower()
   } for voice in tts.get("voices", "en") ]
   return { "voices": voices }
 

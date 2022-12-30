@@ -1,10 +1,6 @@
 <script setup>
 import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
-import SoundApiClient from './libs/SoundApiClient'
-
-SoundApiClient.listVoices().then(console.log)
-SoundApiClient.say({ text: 'Hello to ATC simulator!' })
+import DebugVoices from './components/DebugVoices.vue'
 
 </script>
 
@@ -18,7 +14,7 @@ SoundApiClient.say({ text: 'Hello to ATC simulator!' })
   </header>
 
   <main>
-    <TheWelcome />
+    <DebugVoices/>
   </main>
 </template>
 
