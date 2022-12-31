@@ -42,6 +42,7 @@ def asr_stop():
   result = transcribe(recording)
   print(result.text)
   print("ready")
+  return { "result": result.text }
 
 @route("/tts/speak")
 def tts_speak():

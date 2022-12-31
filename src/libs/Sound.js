@@ -1,26 +1,46 @@
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 
 const url = 'http://localhost:8080'
-const isActive = ref(false)
 
-function call (path) {
-  isActive.value = true
+const STATE_IDLE = 'idle'
+const STATE_RECORDING = 'recording'
+const STATE_PROCESSING = 'processing'
+const STATE_PLAYING = 'playing'
+
+const state = ref(STATE_IDLE)
+
+function call (stateBefore, path, stateAfter = STATE_IDLE) {
+  state.value = stateBefore
   return fetch(url + path)
     .finally(() => {
-      isActive.value = false
+      if (stateAfter) {
+        state.value = stateAfter
+      }
     })
 }
 
 class Sound {
-  isActive = isActive
+  state = state
+
+  isActive = computed(() => state.value !== STATE_IDLE)
 
   listVoices () {
-    return call('/tts/voices').then(res => res.json())
+    return call(STATE_IDLE, '/tts/voices').then(res => res.json())
   }
 
   say ({ text, voice = 'mb/mb-de4-en', speed = 130, pitch = 50 }) {
     const query = new URLSearchParams({ text, voice, speed, pitch })
-    call('/tts/speak?' + query)
+    return call(STATE_PLAYING, '/tts/speak?' + query)
+  }
+
+  startRecording () {
+    return call(STATE_RECORDING, '/asr/start', STATE_RECORDING)
+  }
+
+  stopRecordingAndTranscribe () {
+    return call(STATE_PROCESSING, '/asr/stop')
+      .then(res => res.json())
+      .then(json => json.result)
   }
 }
 
