@@ -1,6 +1,9 @@
 <script setup>
 import { ref } from 'vue'
 import Sound from '@/libs/Sound'
+import { useCommHistoryStore } from '@/stores/commHistory'
+
+const commHistory = useCommHistoryStore()
 
 const isActive = Sound.isActive
 const text = ref('This is a test')
@@ -13,6 +16,7 @@ Sound.listVoices().then(data => {
 })
 
 function play (voice) {
+  commHistory.add('System Debug (' + voice + ')', null, text.value)
   Sound.say({
     text: text.value,
     speed: speed.value,
