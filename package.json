@@ -10,6 +10,7 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --ignore-path .gitignore"
   },
   "dependencies": {
+    "@heroicons/vue": "^2.0.13",
     "pinia": "^2.0.28",
     "vue": "^3.2.45",
     "vue3-keypress": "^4.0.1"

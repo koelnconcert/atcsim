@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import Sound from '@/libs/Sound'
 import { useCommHistoryStore } from '@/stores/commHistory'
+import { PlayIcon } from '@heroicons/vue/24/solid'
 
 const commHistory = useCommHistoryStore()
 
@@ -62,13 +63,14 @@ function play (voice) {
     <li
       v-for="voice in voices"
       :key="voice.voice"
+      class="flex items-center"
     >
       <button
-        class="border border-zinc-600 rounded p-1 my-0.5 mr-1 disabled:text-gray-600 disabled:cursor-not-allowed"
+        class="mr-1 disabled:text-gray-600 disabled:cursor-not-allowed"
         :disabled="isActive"
         @click="play(voice.voice)"
       >
-        Play
+        <PlayIcon class="w-4 h-4"/>
       </button>
       {{ voice.voice }}
     </li>
