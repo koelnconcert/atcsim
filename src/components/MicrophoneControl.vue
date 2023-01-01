@@ -2,7 +2,9 @@
 import { ref } from 'vue'
 import { useKeypress } from 'vue3-keypress'
 import Sound from '@/libs/Sound'
+import { useCommHistoryStore } from '@/stores/commHistory'
 
+const commHistory = useCommHistoryStore()
 const state = Sound.state
 
 const keySpaceActive = ref(true)
@@ -30,6 +32,7 @@ useKeypress({
       success: () => {
         console.log('keyup')
         Sound.stopRecordingAndTranscribe().then(text => {
+          commHistory.add('ASR', null, text)
           Sound.say({ text }).then(() => {
             keySpaceActive.value = true
           })
