@@ -1,5 +1,6 @@
 #!/bin/python3
 import sys
+import time
 
 import numpy
 import whisper
@@ -26,6 +27,7 @@ def record(array):
   stream.start()
   return stream
 
+
 def transcribe(audio):
   audio = audio.flatten()
   audio = whisper.pad_or_trim(audio.flatten())
@@ -33,9 +35,11 @@ def transcribe(audio):
   options = whisper.DecodingOptions(language="English", fp16=False)
   return whisper.decode(model, mel, options)
 
+
 @route("/")
 def root():
   return {"Hello!"}
+
 
 @route("/asr/start")
 def asr_start():
@@ -44,19 +48,36 @@ def asr_start():
 
   record_array = []
   record_stream = record(record_array)
-  print("start")
+
 
 @route("/asr/stop")
 def asr_stop():
   global record_array
   global record_stream
-  print("stop")
+  global recording
   record_stream.stop()
-  print("processing")
   recording = numpy.concatenate(record_array)
+
+
+@route("/asr/replay")
+def asr_replay():
+  sd.play(recording)
+  sd.wait()
+
+
+@route("/asr/transcribe")
+def asr_transcribe():
+  start = time.time()
   result = transcribe(recording)
-  print(result.text)
-  return { "result": result.text }
+  end = time.time()
+  processing_duration = end - start
+  recording_duration = recording.size / sd.default.samplerate
+  print("recording={:.2f}s processing={:.2f}s process_ratio={:.2f} text={}"
+        .format(recording_duration, processing_duration, recording_duration/processing_duration, result.text))
+  return {
+    "result": result.text
+  }
+
 
 @route("/tts/speak")
 def tts_speak():
@@ -68,6 +89,7 @@ def tts_speak():
   tts.set("pitch", request.query.pitch or "50")
   tts.say(text)
   tts.talkback()
+
 
 @route("/tts/voices")
 def tts_voices():

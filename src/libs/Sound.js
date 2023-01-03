@@ -37,10 +37,18 @@ class Sound {
     return call(STATE_RECORDING, '/asr/start', STATE_RECORDING)
   }
 
-  stopRecordingAndTranscribe () {
-    return call(STATE_PROCESSING, '/asr/stop')
+  stopRecording () {
+    return call(STATE_RECORDING, '/asr/stop')
+  }
+
+  transcribeRecording () {
+    return call(STATE_PROCESSING, '/asr/transcribe')
       .then(res => res.json())
       .then(json => json.result)
+  }
+
+  replayRecording () {
+    return call(STATE_PLAYING, '/asr/replay')
   }
 }
 

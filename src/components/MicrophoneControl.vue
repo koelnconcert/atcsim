@@ -31,10 +31,12 @@ useKeypress({
       keyCode: 'space',
       success: () => {
         console.log('keyup')
-        Sound.stopRecordingAndTranscribe().then(text => {
-          commHistory.add('ASR', null, text)
-          Sound.say({ text }).then(() => {
-            keySpaceActive.value = true
+        Sound.stopRecording().then(() => {
+          Sound.transcribeRecording().then(text => {
+            commHistory.add('ASR', null, text)
+            Sound.say({ text }).then(() => {
+              keySpaceActive.value = true
+            })
           })
         })
       }

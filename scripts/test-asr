@@ -1,0 +1,10 @@
+#!/bin/bash
+set -e
+http --quiet :8080/asr/start
+echo -n "Recording... (press enter to stop)"
+read
+http --quiet :8080/asr/stop
+echo "Replaying..."
+http --quiet :8080/asr/replay
+echo "Transcribing..."
+http --body :8080/asr/transcribe
