@@ -15,7 +15,6 @@ useKeypress({
     {
       keyCode: 'space',
       success: () => {
-        console.log('keydown')
         keySpaceActive.value = false
         Sound.startRecording()
       }
@@ -29,16 +28,12 @@ useKeypress({
   keyBinds: [
     {
       keyCode: 'space',
-      success: () => {
-        console.log('keyup')
-        Sound.stopRecording().then(() => {
-          Sound.transcribeRecording().then(text => {
-            commHistory.add('ASR', null, text)
-            Sound.say({ text }).then(() => {
-              keySpaceActive.value = true
-            })
-          })
-        })
+      success: async () => {
+        await Sound.stopRecording()
+        const text = await Sound.transcribeRecording()
+        commHistory.add('ASR', null, text)
+        await Sound.say({ text })
+        keySpaceActive.value = true
       }
     }
   ]
