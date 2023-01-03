@@ -1,4 +1,7 @@
 #!/bin/python3
+import sys
+
+import numpy
 import whisper
 import sounddevice as sd
 from bottle import route, run, request, abort, error
@@ -8,19 +11,26 @@ sd.default.samplerate = 16000 # hardcoded in whisper/audio.py
 sd.default.channels = 1
 
 print("initalizing whisper")
-model = whisper.load_model("base")
+model = whisper.load_model("base", device="cuda") # cpu vs. cuda
 
 print("initalizing espeak")
 tts = speake3.Speake()
 
-def record(seconds=10):
-  return sd.rec(int(seconds * sd.default.samplerate))
+def record(array):
+  def callback(indata, frames, time, status):
+    if status:
+      print(status, file=sys.stderr)
+    array.append(indata.copy())
+
+  stream = sd.InputStream(callback=callback)
+  stream.start()
+  return stream
 
 def transcribe(audio):
   audio = audio.flatten()
-  audio = whisper.pad_or_trim(audio)
+  audio = whisper.pad_or_trim(audio.flatten())
   mel = whisper.log_mel_spectrogram(audio).to(model.device)
-  options = whisper.DecodingOptions(language="English")
+  options = whisper.DecodingOptions(language="English", fp16=False)
   return whisper.decode(model, mel, options)
 
 @route("/")
@@ -29,19 +39,23 @@ def root():
 
 @route("/asr/start")
 def asr_start():
-  global recording
-  recording = record()
+  global record_array
+  global record_stream
+
+  record_array = []
+  record_stream = record(record_array)
   print("start")
 
 @route("/asr/stop")
 def asr_stop():
-  global recording
+  global record_array
+  global record_stream
   print("stop")
-  sd.stop()
+  record_stream.stop()
   print("processing")
+  recording = numpy.concatenate(record_array)
   result = transcribe(recording)
   print(result.text)
-  print("ready")
   return { "result": result.text }
 
 @route("/tts/speak")
