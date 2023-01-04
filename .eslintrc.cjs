@@ -17,6 +17,26 @@ module.exports = {
         selfClosingTag: 'never'
       }
     ],
+    'vue/first-attribute-linebreak': [
+      'warn',
+      {
+        singleline: 'beside',
+        multiline: 'below'
+      }
+    ],
+    'vue/max-attributes-per-line': [
+      'warn',
+      {
+        singleline: {
+          max: 99 // defaults to 1
+        },
+        multiline: {
+          max: 1
+        }
+      }
+    ],
+    // default is not really required according to style guide. The implicit 'undefined' is just fine.
+    'vue/require-default-prop': 'off',
     /*
      * add vue3 uncategorized
      */
