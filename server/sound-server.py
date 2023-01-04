@@ -1,4 +1,6 @@
 #!/bin/python3
+import os
+import subprocess
 import sys
 import time
 
@@ -6,16 +8,12 @@ import numpy
 import whisper
 import sounddevice as sd
 from bottle import route, run, request, abort, error
-import speake3
 
 sd.default.samplerate = 16000 # hardcoded in whisper/audio.py
 sd.default.channels = 1
 
 print("initalizing whisper")
 model = whisper.load_model("base", device="cuda") # cpu vs. cuda
-
-print("initalizing espeak")
-tts = speake3.Speake()
 
 def record(array):
   def callback(indata, frames, time, status):
@@ -84,20 +82,24 @@ def tts_speak():
   text = request.query.text
   if (not text):
     abort(400, "query param 'text' is required")
-  tts.set("voice", request.query.voice or "en")
-  tts.set("speed", request.query.speed or "190")
-  tts.set("pitch", request.query.pitch or "50")
-  tts.say(text)
-  tts.talkback()
+  os.system('espeak -p {pitch} -s {speed} -v {voice} "{text}"'.format(
+    voice=request.query.voice or "en",
+    speed=request.query.speed or "190",
+    pitch=request.query.pitch or "50",
+    text=text))
 
 
 @route("/tts/voices")
 def tts_voices():
+  output = subprocess.check_output("espeak --voices=en", shell=True, text=True)
+  #header line of output:
+  #Pty  Language  Age/Gender  VoiceName  File  Other Languages
+  lines = [ line.split(None, 5) for line in output.splitlines() ]
   voices = [ {
-    "voice": voice["File"],
-    "label": voice["VoiceName"],
-    "gender": voice["Age/Gender"].lower()
-  } for voice in tts.get("voices", "en") ]
+    "voice": line[4],
+    "label": line[3],
+    "gender": line[2].lower()
+  } for line in lines[1:]]
   return { "voices": voices }
 
 print("start webserver")
