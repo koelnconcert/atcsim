@@ -14,6 +14,7 @@ import OptionButtons from './components/OptionButtons.vue'
     </main>
     <aside class="row-span-2 w-64 h-full right-0 bg-zinc-800 p-2 overflow-hidden">
       <MicrophoneControl class="mb-2"/>
+      <h2 class="mt-4 mb-2 text-lg">Debugging</h2>
       <OptionButtons/>
     </aside>
     <footer class="w-full h-24 bg-zinc-800 p-2 overflow-hidden">
