@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import Sound from '@/libs/Sound'
 import { useCommHistoryStore } from '@/stores/commHistory'
 import { PlayIcon } from '@heroicons/vue/24/solid'
+import GenericButton from './generic/GenericButton.vue'
 
 const commHistory = useCommHistoryStore()
 
@@ -63,15 +64,15 @@ function play (voice) {
     <li
       v-for="voice in voices"
       :key="voice.voice"
-      class="flex items-center"
+      class="flex items-center mb-1"
     >
-      <button
-        class="mr-1 disabled:text-gray-600 disabled:cursor-not-allowed"
+      <GenericButton
+        class="mr-1"
         :disabled="isActive"
         @click="play(voice.voice)"
       >
         <PlayIcon class="w-4 h-4"/>
-      </button>
+      </GenericButton>
       {{ voice.voice }}
     </li>
   </ul>
