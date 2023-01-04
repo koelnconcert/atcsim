@@ -45,10 +45,10 @@ useKeypress({
   <div
     class="text-white p-2 text-center"
     :class="{
-      'bg-blue-400': state === 'idle',
-      'bg-red-400': state === 'recording',
-      'bg-yellow-400': state === 'processing',
-      'bg-green-400': state === 'playing'
+      'bg-sky-900': state === 'idle',
+      'bg-red-900': state === 'recording',
+      'bg-yellow-700': state === 'processing',
+      'bg-green-900': state === 'playing'
     }"
   >
     {{ state }}
