@@ -2,6 +2,7 @@
 import MicrophoneControl from '@/components/MicrophoneControl.vue'
 import CommHistory from '@/components/CommHistory.vue'
 import OptionButtons from './components/OptionButtons.vue'
+import SoundStatus from './components/SoundStatus.vue'
 
 </script>
 
@@ -13,8 +14,11 @@ import OptionButtons from './components/OptionButtons.vue'
       </div>
     </main>
     <aside class="row-span-2 w-64 h-full right-0 bg-zinc-800 p-2 overflow-hidden">
+      <SoundStatus/>
       <MicrophoneControl class="mb-2"/>
-      <h2 class="mt-4 mb-2 text-lg">Debugging</h2>
+      <h2 class="mt-4 mb-2 text-lg">
+        Debugging
+      </h2>
       <OptionButtons/>
     </aside>
     <footer class="w-full h-24 bg-zinc-800 p-2 overflow-hidden">
