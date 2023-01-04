@@ -1,39 +1,29 @@
 <script setup>
-import { useKeypress } from 'vue3-keypress'
+import { Dialog, DialogPanel } from '@headlessui/vue'
 
-const props = defineProps({
-  show: Boolean
+defineProps({
+  open: Boolean
 })
-const emit = defineEmits(['update:show'])
+const emit = defineEmits(['update:open'])
 
 function close () {
-  emit('update:show', false)
+  emit('update:open', false)
 }
-
-useKeypress({
-  keyEvent: 'keydown',
-  keyBinds: [
-    {
-      keyCode: 'esc',
-      success: close
-    }
-  ],
-  isActive: props.show
-})
 </script>
 
 <template>
-  <template v-if="show">
-    <Teleport to="body">
-      <div class="absolute inset-0 bg-black/80"/>
-      <div
-        class="absolute inset-0 grid place-items-center overflow-scroll p-8"
-        @click.self="close"
-      >
-        <div class="bg-zinc-800 w-auto p-2">
-          <slot/>
-        </div>
-      </div>
-    </Teleport>
-  </template>
+  <Dialog
+    :open="open"
+    @close="close"
+  >
+    <div
+      class="fixed inset-0 bg-black/80"
+      aria-hidden="true"
+    />
+    <div class="fixed inset-0 grid place-items-center overflow-y-auto p-8">
+      <DialogPanel class="bg-zinc-800 w-auto p-2">
+        <slot/>
+      </DialogPanel>
+    </div>
+  </Dialog>
 </template>

@@ -15,7 +15,7 @@ const showDebugVoices = ref(false)
     <AdjustmentsHorizontalIcon class="w-6 h-6 mr-1"/>
     Options
   </button>
-  <ModalDialog v-model:show="showDebugVoices">
+  <ModalDialog v-model:open="showDebugVoices">
     <DebugVoices/>
   </ModalDialog>
 </template>
