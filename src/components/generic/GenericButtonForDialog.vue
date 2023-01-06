@@ -5,7 +5,7 @@ import GenericButton from './GenericButton.vue'
 
 defineProps({
   icon: {
-    type: Object,
+    type: Function, // Component
     required: false
   },
   text: {

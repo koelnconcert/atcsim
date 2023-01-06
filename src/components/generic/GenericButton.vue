@@ -1,7 +1,7 @@
 <script setup>
 defineProps({
   icon: {
-    type: Object,
+    type: Function, // Component
     required: false
   }
 })
