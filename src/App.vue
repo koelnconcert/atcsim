@@ -1,9 +1,20 @@
 <script setup>
-import MicrophoneControl from '@/components/MicrophoneControl.vue'
 import CommHistory from '@/components/CommHistory.vue'
 import OptionButtons from './components/OptionButtons.vue'
 import SoundStatus from './components/SoundStatus.vue'
+import MicrophoneControl from '@/libs/MicrophoneControl'
+import Sound from '@/libs/Sound'
+import { useCommHistoryStore } from '@/stores/commHistory'
 
+const commHistory = useCommHistoryStore()
+
+MicrophoneControl.init({
+  afterRecording: async () => {
+    const text = await Sound.transcribeRecording()
+    commHistory.add('ASR', null, text)
+    await Sound.say({ text })
+  }
+})
 </script>
 
 <template>
@@ -15,7 +26,6 @@ import SoundStatus from './components/SoundStatus.vue'
     </main>
     <aside class="row-span-2 w-64 h-full right-0 bg-zinc-800 p-2 overflow-hidden">
       <SoundStatus/>
-      <MicrophoneControl class="mb-2"/>
       <h2 class="mt-4 mb-2 text-lg">
         Debugging
       </h2>
