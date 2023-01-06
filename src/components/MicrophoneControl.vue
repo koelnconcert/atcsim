@@ -1,12 +1,23 @@
 <script setup>
-import { ref } from 'vue'
+import { computed, nextTick } from 'vue'
 import { useKeypress } from 'vue3-keypress'
 import Sound from '@/libs/Sound'
 import { useCommHistoryStore } from '@/stores/commHistory'
 
 const commHistory = useCommHistoryStore()
 
-const keySpaceActive = ref(true)
+function unfocusIfDisabled () {
+  // unfocus current element if it is disabled; otherwiese event keyup will not trigger
+  nextTick(() => {
+    if (document.activeElement.disabled) {
+      document.activeElement.blur()
+    }
+  })
+}
+
+function isInputLikeElementFocus () {
+  return ['input', 'textarea'].includes(document.activeElement.tagName.toLowerCase())
+}
 
 useKeypress({
   keyEvent: 'keydown',
@@ -14,12 +25,14 @@ useKeypress({
     {
       keyCode: 'space',
       success: () => {
-        keySpaceActive.value = false
-        Sound.startRecording()
+        if (!isInputLikeElementFocus()) {
+          Sound.startRecording()
+          unfocusIfDisabled()
+        }
       }
     }
   ],
-  isActive: keySpaceActive
+  isActive: computed(() => Sound.state.value === 'idle')
 })
 
 useKeypress({
@@ -32,10 +45,11 @@ useKeypress({
         const text = await Sound.transcribeRecording()
         commHistory.add('ASR', null, text)
         await Sound.say({ text })
-        keySpaceActive.value = true
+        unfocusIfDisabled()
       }
     }
-  ]
+  ],
+  isActive: computed(() => Sound.state.value === 'recording')
 })
 
 </script>
