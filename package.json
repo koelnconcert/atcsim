@@ -6,7 +6,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "test:unit": "vitest --environment jsdom --root src/",
+    "test:unit": "vitest --environment jsdom",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --ignore-path .gitignore",
     "presound-server": "sudo rmmod nvidia_uvm",
     "sound-server": "server/sound-server.py"
@@ -14,6 +14,7 @@
   "dependencies": {
     "@headlessui/vue": "^1.7.7",
     "@heroicons/vue": "^2.0.13",
+    "nearley": "^2.20.1",
     "pinia": "^2.0.28",
     "vue": "^3.2.45",
     "vue3-keypress": "^4.0.1"
