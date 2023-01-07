@@ -13,13 +13,22 @@ function compileGrammar (sourceCode, filename) {
 
 export default function () {
   return {
-    name: 'my-plugin',
+    name: 'vite-plugin-nearly',
     transform (src, id) {
       if (id.endsWith('.ne')) {
-        console.log('transform', id)
-        return {
-          code: compileGrammar(src, id)
-        }
+        const code = compileGrammar(src, id)
+        /*
+           nearley does not procude a esm module, but rather the code contains the following:
+
+              if (typeof module !== 'undefined'&& typeof module.exports !== 'undefined') {
+                module.exports = grammar;
+              } else {
+                window.grammar = grammar;
+              }
+         */
+        const preCode = 'const window = {};\n'
+        const postCode = 'export default window.grammar || module.exports \n'
+        return { code: preCode + code + postCode }
       }
     }
   }
