@@ -41,10 +41,12 @@ function init ({ afterRecording }) {
     keyBinds: [
       {
         keyCode: 'space',
-        success: async () => {
+        preventDefault: false,
+        success: async (event) => {
           if (!isInputLikeElementFocus()) {
             await Sound.startRecording()
             unfocusIfDisabled()
+            event.preventDefault = true
           }
         }
       }
