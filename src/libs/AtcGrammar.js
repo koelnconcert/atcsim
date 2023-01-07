@@ -4,7 +4,7 @@ import grammar from '@/grammar/atc.ne'
 export default {
   defaultStart: () => grammar.ParserStart,
   ruleNames: () => grammar.ParserRules.map(rule => rule.name),
-  parse: (text, parserStart) => {
+  parse: (text, parserStart = 'START') => {
     try {
       const currentGrammer = nearley.Grammar.fromCompiled(grammar)
       if (parserStart) {
