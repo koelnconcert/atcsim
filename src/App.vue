@@ -12,7 +12,6 @@ MicrophoneControl.init({
   afterRecording: async () => {
     const text = await Sound.transcribeRecording()
     commHistory.add('ASR', null, text)
-    await Sound.say({ text })
   }
 })
 </script>
