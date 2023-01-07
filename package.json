@@ -8,7 +8,7 @@
     "preview": "vite preview",
     "test:unit": "vitest --environment jsdom",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --ignore-path .gitignore",
-    "presound-server": "sudo rmmod nvidia_uvm",
+    "presound-server": "sudo rmmod nvidia_uvm; true",
     "sound-server": "server/sound-server.py"
   },
   "dependencies": {
