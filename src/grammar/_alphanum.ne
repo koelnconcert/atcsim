@@ -1,5 +1,7 @@
+ALPHANUMS -> ( ALPHANUM ( _ ALPHANUM ):* )  {% deepJoin %}
 ALPHANUM -> ( DIGIT | LETTER )  {% unnest %}
 
+DIGITS -> ( DIGIT ( _ DIGIT ):* )  {% deepJoin %}
 DIGIT -> (0|1|2|3|4|5|6|7|8|9)  {% unnest %}
 0 -> ( "0" | "zero" )                {% () => "0" %}
 1 -> ( "1" | "one" | "on" )          {% () => "1" %}

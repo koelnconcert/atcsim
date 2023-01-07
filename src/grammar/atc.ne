@@ -1,7 +1,16 @@
 @include "_functions.ne"
 @include "_alphanum.ne"
+@include "_callsigns.ne"
+@include "_phrases.ne"
 
-START -> ( ID _ )  {% removeNull %}
-_ -> [ !.,?]:*   {% () => null %}
+START -> CALLSIGN (__ PHRASE):* _
+{% data => {
+  return {
+    callsign: data[0],
+    instructions: removeNull(flatten(data[1]))
+  }
+}%}
 
-ID -> ( ALPHANUM ( _ ID ):? )  {% (data) => removeNull(flatten(data)).join('') %}
+_ -> __:?         {% () => null %}
+__ -> [ !.,?]:+   {% () => null %}
+
