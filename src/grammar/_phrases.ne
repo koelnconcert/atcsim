@@ -8,7 +8,7 @@ PHRASE_IDENTIFIED -> ( "identified" | "radar contact" )
   }
 }%}
 
-PHRASE_TURN -> "turn" __ ("left"|"right") __ "heading" __ DIGITS
+PHRASE_TURN -> ("turn"|"turned") __ ("left"|"right") __ "heading" __ DIGITS (__ "degrees"):?
 {% data => {
   return {
     command: 'turn ' + data[2][0],
