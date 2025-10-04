@@ -7,7 +7,7 @@ import time
 import numpy
 import whisper
 import sounddevice as sd
-from bottle import route, run, request, abort, error
+from bottle import route, run, request, response, abort, error, hook
 
 sd.default.samplerate = 16000 # hardcoded in whisper/audio.py
 sd.default.channels = 1
@@ -101,6 +101,12 @@ def tts_voices():
     "gender": line[2].lower()
   } for line in lines[1:]]
   return { "voices": voices }
+
+@hook('after_request')
+def enable_cors():
+  response.headers['Access-Control-Allow-Origin'] = '*'
+  response.headers['Access-Control-Allow-Methods'] = 'PUT, GET, POST, DELETE, OPTIONS'
+  response.headers['Access-Control-Allow-Headers'] = 'Origin, Accept, Content-Type, X-Requested-With, X-CSRF-Token'
 
 print("start webserver")
 run(host="localhost", port=8080, debug=True)
