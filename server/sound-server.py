@@ -9,12 +9,6 @@ import whisper
 import sounddevice as sd
 from bottle import route, run, request, response, abort, error, hook
 
-sd.default.samplerate = 16000 # hardcoded in whisper/audio.py
-sd.default.channels = 1
-
-print("initalizing whisper")
-model = whisper.load_model("jlvdoorn_whisper-small.en-atcosim.bin.whisper", device="cuda") # cpu vs. cuda
-
 def record(array):
   def callback(indata, frames, time, status):
     if status:
@@ -107,6 +101,15 @@ def enable_cors():
   response.headers['Access-Control-Allow-Origin'] = '*'
   response.headers['Access-Control-Allow-Methods'] = 'PUT, GET, POST, DELETE, OPTIONS'
   response.headers['Access-Control-Allow-Headers'] = 'Origin, Accept, Content-Type, X-Requested-With, X-CSRF-Token'
+
+def init_whisper():
+  print("initalizing whisper")
+  global model
+  sd.default.samplerate = 16000 # hardcoded in whisper/audio.py
+  sd.default.channels = 1
+  model = whisper.load_model("jlvdoorn_whisper-small.en-atcosim.bin.whisper", device="cuda") # cpu vs. cuda
+
+init_whisper()
 
 print("start webserver")
 run(host="localhost", port=8080, debug=True)
