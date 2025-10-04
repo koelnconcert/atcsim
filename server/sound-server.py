@@ -13,7 +13,7 @@ sd.default.samplerate = 16000 # hardcoded in whisper/audio.py
 sd.default.channels = 1
 
 print("initalizing whisper")
-model = whisper.load_model("base", device="cuda") # cpu vs. cuda
+model = whisper.load_model("jlvdoorn_whisper-small.en-atcosim.bin.whisper", device="cuda") # cpu vs. cuda
 
 def record(array):
   def callback(indata, frames, time, status):
