@@ -48,6 +48,7 @@ def asr_stop():
   global record_stream
   global recording
   record_stream.stop()
+  record_stream.close()
   recording = numpy.concatenate(record_array)
 
 
