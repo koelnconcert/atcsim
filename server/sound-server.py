@@ -79,7 +79,8 @@ def tts_speak():
     abort(400, "query param 'text' is required")
 
   generator = kokoro_pipeline(text, 
-    voice=request.query.voice or "af_heart"
+    voice=request.query.voice or "af_heart",
+    speed=float(request.query.speed or "1")
   )
   for i, (gs, ps, audio) in enumerate(generator):
     sd.play(audio, samplerate=24000)

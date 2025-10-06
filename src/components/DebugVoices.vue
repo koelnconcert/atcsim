@@ -10,7 +10,7 @@ const commHistory = useCommHistoryStore()
 const isActive = Sound.isActive
 const text = ref('This is a test')
 const voices = ref([])
-const speed = ref(140)
+const speed = ref(1)
 const pitch = ref(50)
 
 Sound.listVoices().then(data => {
@@ -37,8 +37,9 @@ function play (voice) {
         v-model="speed"
         type="range"
         class="max-w-xs"
-        min="20"
-        max="200"
+        min="0.1"
+        max="1.9"
+        step="0.1"
       >
       {{ speed }}
     </div>
