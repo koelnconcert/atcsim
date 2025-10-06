@@ -14,7 +14,7 @@ const speed = ref(140)
 const pitch = ref(50)
 
 Sound.listVoices().then(data => {
-  voices.value = data.voices.sort((a, b) => a.voice.localeCompare(b.voice))
+  voices.value = data.voices
 })
 
 function play (voice) {
@@ -63,17 +63,17 @@ function play (voice) {
   <ul>
     <li
       v-for="voice in voices"
-      :key="voice.voice"
+      :key="voice"
       class="flex items-center mb-1"
     >
       <GenericButton
         class="mr-1"
         :disabled="isActive"
-        @click="play(voice.voice)"
+        @click="play(voice)"
       >
         <PlayIcon class="w-4 h-4"/>
       </GenericButton>
-      {{ voice.voice }}
+      {{ voice }}
     </li>
   </ul>
 </template>

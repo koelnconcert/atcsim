@@ -1,5 +1,5 @@
 #!/bin/python3
-import subprocess
+import re
 import sys
 import time
 
@@ -88,15 +88,6 @@ def tts_speak():
 
 @route("/tts/voices")
 def tts_voices():
-  output = subprocess.check_output("espeak --voices=en", shell=True, text=True)
-  #header line of output:
-  #Pty  Language  Age/Gender  VoiceName  File  Other Languages
-  lines = [ line.split(None, 5) for line in output.splitlines() ]
-  voices = [ {
-    "voice": line[4],
-    "label": line[3],
-    "gender": line[2].lower()
-  } for line in lines[1:]]
   return { "voices": voices }
 
 @hook('after_request')
@@ -115,10 +106,20 @@ def init_whisper():
 def init_kokoro():
   print("initalizing kokoro")
   global kokoro_pipeline
+  global voices
   kokoro_pipeline = KPipeline(
     lang_code='a', 
     repo_id='hexgrad/Kokoro-82M' # default, but prevents warning
   )
+
+  voices = []
+  with open("VOICES.md") as file:
+    for line in file:
+      if "🚺" in line or "🚹" in line: # woman or man
+        parts = line.split("|")
+        voice = re.sub("[^a-z_]+", "", parts[1]) # e.g. convert '**af\\_heart**' to 'af_heart'
+        voices.append(voice)
+
 
 init_whisper()
 init_kokoro()
