@@ -11,7 +11,6 @@ const isActive = Sound.isActive
 const text = ref('This is a test')
 const voices = ref([])
 const speed = ref(1)
-const pitch = ref(50)
 
 Sound.listVoices().then(data => {
   voices.value = data.voices
@@ -22,7 +21,6 @@ function play (voice) {
   Sound.say({
     text: text.value,
     speed: speed.value,
-    pitch: pitch.value,
     voice
   })
 }
@@ -42,17 +40,6 @@ function play (voice) {
         step="0.1"
       >
       {{ speed }}
-    </div>
-    <label>Pitch</label>
-    <div>
-      <input
-        v-model="pitch"
-        type="range"
-        class="max-w-xs"
-        min="0"
-        max="99"
-      >
-      {{ pitch }}
     </div>
     <label>Text</label>
     <input

@@ -28,8 +28,8 @@ class Sound {
     return call(STATE_IDLE, '/tts/voices').then(res => res.json())
   }
 
-  say ({ text, voice = 'mb/mb-de4-en', speed = 130, pitch = 50 }) {
-    const query = new URLSearchParams({ text, voice, speed, pitch })
+  say ({ text, voice = 'af', speed = 1 }) {
+    const query = new URLSearchParams({ text, voice, speed })
     return call(STATE_PLAYING, '/tts/speak?' + query)
   }
 
