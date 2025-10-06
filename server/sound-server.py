@@ -1,5 +1,4 @@
 #!/bin/python3
-import os
 import subprocess
 import sys
 import time
@@ -7,6 +6,7 @@ import time
 import numpy
 import whisper
 import sounddevice as sd
+from kokoro import KPipeline
 from bottle import route, run, request, response, abort, error, hook
 
 def record(array):
@@ -77,11 +77,13 @@ def tts_speak():
   text = request.query.text
   if (not text):
     abort(400, "query param 'text' is required")
-  os.system('espeak -p {pitch} -s {speed} -v {voice} "{text}"'.format(
-    voice=request.query.voice or "en",
-    speed=request.query.speed or "190",
-    pitch=request.query.pitch or "50",
-    text=text))
+
+  generator = kokoro_pipeline(text, 
+    voice=request.query.voice or "af_heart"
+  )
+  for i, (gs, ps, audio) in enumerate(generator):
+    sd.play(audio, samplerate=24000)
+    sd.wait()
 
 
 @route("/tts/voices")
@@ -110,7 +112,16 @@ def init_whisper():
   sd.default.channels = 1
   model = whisper.load_model("jlvdoorn_whisper-small.en-atcosim.bin.whisper", device="cuda") # cpu vs. cuda
 
+def init_kokoro():
+  print("initalizing kokoro")
+  global kokoro_pipeline
+  kokoro_pipeline = KPipeline(
+    lang_code='a', 
+    repo_id='hexgrad/Kokoro-82M' # default, but prevents warning
+  )
+
 init_whisper()
+init_kokoro()
 
 print("start webserver")
 run(host="localhost", port=8080, debug=True)

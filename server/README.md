@@ -2,7 +2,7 @@ Install:
 
     python3 -m venv .venv
     source .venv/bin/activate
-    pip3 install -r requirements
+    pip3 install -r requirements --ignore-requires-python
 
 Download and convert model:
 
